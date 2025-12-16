@@ -1,0 +1,31 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model Attendee {
+  id        Int      @id @default(autoincrement())
+  name      String   @unique
+  status    String   // ATTENDING or NOT_ATTENDING
+  updatedAt DateTime @updatedAt
+}
+
+model Place {
+  id          Int      @id @default(autoincrement())
+  title       String
+  description String?
+  createdAt   DateTime @default(now())
+  votes       Vote[]
+}
+
+model Vote {
+  id        Int      @id @default(autoincrement())
+  voterName String   @unique
+  placeId   Int
+  place     Place    @relation(fields: [placeId], references: [id])
+  updatedAt DateTime @updatedAt
+}
